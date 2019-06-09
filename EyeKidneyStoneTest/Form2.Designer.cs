@@ -1,4 +1,4 @@
-﻿namespace FormProcessing
+﻿namespace EyeKidneyStoneTest
 {
     partial class Form2
     {

@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CsvHelper;
 
-namespace FormProcessing
+namespace EyeKidneyStoneTest
 {
     public partial class Form2 : Form
     {
         Bitmap bmp_base, bmp_roi, bmp_canny, bmp_temp;
+        List<WriteData> records = new List<WriteData>();
 
         double r_black = 0, r_white = 0;
         int[,] matrix = new int[3, 3];
@@ -162,6 +165,8 @@ namespace FormProcessing
 
             bmp_base = bmp_img_fix;
             pb_img.Image = bmp_base;
+            Directory.SetCurrentDirectory("C:\\Users\\bro\\source\\repos\\EyeKidneyStoneTest\\Data\\Sclera");
+            pb_img.Image.Save(openFileDialog1.SafeFileName);
 
         }
 
@@ -347,10 +352,10 @@ namespace FormProcessing
 
         private void btn_roi_Click(object sender, EventArgs e)
         {
-            int left = bmp_base.Width * 16 / 32;
-            int right = bmp_base.Width * 19 / 32;
-            int top = Convert.ToInt16(bmp_base.Height * 23.5 / 32);
-            int bottom = Convert.ToInt16(bmp_base.Height * 31 / 32);
+            int left = bmp_base.Width * 20 / 40;
+            int right = bmp_base.Width * 28 / 40;
+            int top = Convert.ToInt16(bmp_base.Height * 22 / 40);
+            int bottom = Convert.ToInt16(bmp_base.Height * 36 / 40);
 
             Bitmap roi_area = new Bitmap(bmp_base);
             for (int i = 0; i < bmp_base.Width; i++)
@@ -386,6 +391,9 @@ namespace FormProcessing
                 yb = 0;
             }
             pb_roi_img.Image = bmp_roi;
+            Directory.SetCurrentDirectory("C:\\Users\\bro\\source\\repos\\EyeKidneyStoneTest\\Data\\ScleraROI");
+            pb_roi_img.Image.Save(openFileDialog1.SafeFileName);
+
         }
 
         private void btn_rasio_Click(object sender, EventArgs e)
@@ -433,6 +441,16 @@ namespace FormProcessing
             txt_ratio_bw.Text = "Ratio hitam = " + Math.Round(r_black, 3) +
                "\nRatio putih = " + Math.Round(r_white, 3);
 
+            WriteData record = new WriteData();
+
+            record.no = 1;
+            record.namaFoto = openFileDialog1.SafeFileName;
+            record.rasioHitam = r_black;
+            record.rasioPutih = r_white;
+            record.sumPixelHitam = Convert.ToInt16(black_count);
+            record.sumPixelPutih = Convert.ToInt16(white_count);
+            record.hasilAhli = "Tinggi";
+            records.Add(record);
 
         }
 
@@ -444,6 +462,12 @@ namespace FormProcessing
                 tx_hasil.Text = "HASIL: Abnormal";
             else
                 tx_hasil.Text = "HASIL: Normal";
+
+            using (var writer = new StreamWriter("C:\\Users\\bro\\source\\repos\\EyeKidneyStoneTest\\Data\\scleraData.csv"))
+            using (var csv = new CsvWriter(writer))
+            {
+                csv.WriteRecords(records);
+            }
         }
 
 

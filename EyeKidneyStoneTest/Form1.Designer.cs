@@ -1,4 +1,4 @@
-﻿namespace FormProcessing
+﻿namespace EyeKidneyStoneTest
 {
     partial class Form1
     {
@@ -50,6 +50,7 @@
             this.btn_prewitt = new System.Windows.Forms.Button();
             this.btn_laplace = new System.Windows.Forms.Button();
             this.btn_canny = new System.Windows.Forms.Button();
+            this.buttonSclera = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pb_roi)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_img)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_crop_iris)).BeginInit();
@@ -137,7 +138,7 @@
             this.pb_roi_img.Location = new System.Drawing.Point(441, 366);
             this.pb_roi_img.Margin = new System.Windows.Forms.Padding(4);
             this.pb_roi_img.Name = "pb_roi_img";
-            this.pb_roi_img.Size = new System.Drawing.Size(146, 192);
+            this.pb_roi_img.Size = new System.Drawing.Size(200, 200);
             this.pb_roi_img.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pb_roi_img.TabIndex = 72;
             this.pb_roi_img.TabStop = false;
@@ -148,7 +149,7 @@
             this.tx_hasil.AutoSize = true;
             this.tx_hasil.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tx_hasil.ForeColor = System.Drawing.Color.Maroon;
-            this.tx_hasil.Location = new System.Drawing.Point(879, 535);
+            this.tx_hasil.Location = new System.Drawing.Point(1159, 505);
             this.tx_hasil.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.tx_hasil.Name = "tx_hasil";
             this.tx_hasil.Size = new System.Drawing.Size(73, 24);
@@ -158,7 +159,7 @@
             // 
             // btn_kondisi
             // 
-            this.btn_kondisi.Location = new System.Drawing.Point(883, 476);
+            this.btn_kondisi.Location = new System.Drawing.Point(1163, 446);
             this.btn_kondisi.Margin = new System.Windows.Forms.Padding(4);
             this.btn_kondisi.Name = "btn_kondisi";
             this.btn_kondisi.Size = new System.Drawing.Size(172, 41);
@@ -170,7 +171,7 @@
             // txt_ratio_bw
             // 
             this.txt_ratio_bw.AutoSize = true;
-            this.txt_ratio_bw.Location = new System.Drawing.Point(680, 607);
+            this.txt_ratio_bw.Location = new System.Drawing.Point(938, 682);
             this.txt_ratio_bw.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.txt_ratio_bw.Name = "txt_ratio_bw";
             this.txt_ratio_bw.Size = new System.Drawing.Size(20, 17);
@@ -181,10 +182,10 @@
             // pb_extract
             // 
             this.pb_extract.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pb_extract.Location = new System.Drawing.Point(684, 366);
+            this.pb_extract.Location = new System.Drawing.Point(794, 366);
             this.pb_extract.Margin = new System.Windows.Forms.Padding(4);
             this.pb_extract.Name = "pb_extract";
-            this.pb_extract.Size = new System.Drawing.Size(146, 192);
+            this.pb_extract.Size = new System.Drawing.Size(300, 300);
             this.pb_extract.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pb_extract.TabIndex = 77;
             this.pb_extract.TabStop = false;
@@ -193,7 +194,7 @@
             // txt_bw
             // 
             this.txt_bw.AutoSize = true;
-            this.txt_bw.Location = new System.Drawing.Point(879, 607);
+            this.txt_bw.Location = new System.Drawing.Point(1159, 577);
             this.txt_bw.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.txt_bw.Name = "txt_bw";
             this.txt_bw.Size = new System.Drawing.Size(20, 17);
@@ -203,7 +204,7 @@
             // 
             // btn_rasio
             // 
-            this.btn_rasio.Location = new System.Drawing.Point(441, 607);
+            this.btn_rasio.Location = new System.Drawing.Point(468, 644);
             this.btn_rasio.Margin = new System.Windows.Forms.Padding(4);
             this.btn_rasio.Name = "btn_rasio";
             this.btn_rasio.Size = new System.Drawing.Size(147, 39);
@@ -214,7 +215,7 @@
             // 
             // edit_threshold
             // 
-            this.edit_threshold.Location = new System.Drawing.Point(883, 432);
+            this.edit_threshold.Location = new System.Drawing.Point(1163, 402);
             this.edit_threshold.Margin = new System.Windows.Forms.Padding(4);
             this.edit_threshold.Name = "edit_threshold";
             this.edit_threshold.Size = new System.Drawing.Size(171, 22);
@@ -227,7 +228,7 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Tan;
             this.label1.ForeColor = System.Drawing.Color.Snow;
-            this.label1.Location = new System.Drawing.Point(879, 400);
+            this.label1.Location = new System.Drawing.Point(1159, 370);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(137, 17);
@@ -247,7 +248,7 @@
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.SaddleBrown;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(724, 346);
+            this.label2.Location = new System.Drawing.Point(920, 345);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 17);
@@ -288,12 +289,23 @@
             this.btn_canny.UseVisualStyleBackColor = true;
             this.btn_canny.Click += new System.EventHandler(this.btn_canny_Click);
             // 
+            // buttonSclera
+            // 
+            this.buttonSclera.Location = new System.Drawing.Point(941, 113);
+            this.buttonSclera.Name = "buttonSclera";
+            this.buttonSclera.Size = new System.Drawing.Size(139, 64);
+            this.buttonSclera.TabIndex = 91;
+            this.buttonSclera.Text = "Next Sclera";
+            this.buttonSclera.UseVisualStyleBackColor = true;
+            this.buttonSclera.Click += new System.EventHandler(this.buttonSclera_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(1135, 747);
+            this.ClientSize = new System.Drawing.Size(1437, 747);
+            this.Controls.Add(this.buttonSclera);
             this.Controls.Add(this.btn_canny);
             this.Controls.Add(this.btn_laplace);
             this.Controls.Add(this.btn_prewitt);
@@ -351,5 +363,6 @@
         private System.Windows.Forms.Button btn_prewitt;
         private System.Windows.Forms.Button btn_laplace;
         private System.Windows.Forms.Button btn_canny;
+        private System.Windows.Forms.Button buttonSclera;
     }
 }

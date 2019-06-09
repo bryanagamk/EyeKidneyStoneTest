@@ -3,18 +3,24 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
+using CsvHelper;
 
-namespace FormProcessing
+namespace EyeKidneyStoneTest
 {
     public partial class Form1 : Form
     {
         Bitmap bmp_base, bmp_roi, bmp_canny, bmp_temp;
+        List<WriteData> records = new List<WriteData>();
+
 
         double r_black = 0, r_white = 0;
+        
         int[,] matrix = new int[3, 3];
         int[,] sobelX = new int[3, 3];
         int[,] sobelY = new int[3, 3];
@@ -35,6 +41,7 @@ namespace FormProcessing
 
         public Form1(Bitmap bmp_crop_color2)
         {
+
             InitializeComponent();
             Inisialisasi();
             Bitmap bmp = bmp_crop_color2;
@@ -46,6 +53,7 @@ namespace FormProcessing
         public void Inisialisasi()
         {
             // Sobel
+
             sobelX[0, 0] = -3; sobelX[0, 1] = 0; sobelX[0, 2] = 3;
             sobelX[1, 0] = -10; sobelX[1, 1] = 0; sobelX[1, 2] = 10;
             sobelX[2, 0] = -3; sobelX[2, 1] = 0; sobelX[2, 2] = 3;
@@ -162,6 +170,8 @@ namespace FormProcessing
 
             bmp_base = bmp_img_fix;
             pb_img.Image = bmp_base;
+            Directory.SetCurrentDirectory("C:\\Users\\bro\\source\\repos\\EyeKidneyStoneTest\\Data\\Iris");
+            pb_img.Image.Save(openFileDialog1.SafeFileName);
 
         }
 
@@ -335,6 +345,21 @@ namespace FormProcessing
 
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            if (e.CloseReason == CloseReason.WindowsShutDown) return;
+            
+        }
+
+        private void buttonSclera_Click(object sender, EventArgs e)
+        {
+            Form2 form;
+            form = new Form2();
+            form.Show();
+        }
+
         public int getMagnitude(Bitmap bmp2a, Bitmap bmp2b, int x, int y)
         {
             int value1 = bmp2a.GetPixel(x, y).R;
@@ -347,10 +372,10 @@ namespace FormProcessing
 
         private void btn_roi_Click(object sender, EventArgs e)
         {
-            int left = bmp_base.Width * 16 / 32;
-            int right = bmp_base.Width * 19 / 32;
-            int top = Convert.ToInt16(bmp_base.Height * 23.5 / 32);
-            int bottom = Convert.ToInt16(bmp_base.Height * 31 / 32);
+            int left = bmp_base.Width * 20 / 40;
+            int right = bmp_base.Width * 26 / 40;
+            int top = Convert.ToInt16(bmp_base.Height * 30 / 40);
+            int bottom = Convert.ToInt16(bmp_base.Height * 38 / 40);
 
             Bitmap roi_area = new Bitmap(bmp_base);
             for (int i = 0; i < bmp_base.Width; i++)
@@ -369,6 +394,36 @@ namespace FormProcessing
                     }
                 }
             }
+
+            /*
+             * Polygon ROI
+            Bitmap polygon = new Bitmap(bmp_base);
+            Graphics ix = Graphics.FromImage(polygon);
+            Pen redPen = new Pen(Color.Red);
+            Point[] a = { new Point(left, top), new Point(right, top), new Point(right, bottom), new Point(left, bottom) };
+            ix.DrawPolygon(redPen, a);
+            ix.Dispose();
+            pb_roi.Image = polygon;
+            */
+            /*
+             * Lingkaran ROI
+            Bitmap roi_lingkaran = new Bitmap(bmp_base);
+            Graphics g = Graphics.FromImage(roi_lingkaran);
+            Pen redPen = new Pen(Color.Red);
+
+            int a = bmp_base.Width / 4;
+            int b = bmp_base.Height / 4;
+            int width = bmp_base.Width / 2;
+            int height = bmp_base.Height / 2;
+            int diameter = Math.Min(width, height);
+            g.DrawEllipse(redPen, a, b, diameter, diameter);
+            g.DrawString("12", new Font("Arial", 12), Brushes.Black, new PointF(140, 2));
+            g.DrawString("3", new Font("Arial", 12), Brushes.Black, new PointF(286, 140));
+            g.DrawString("6", new Font("Arial", 12), Brushes.Black, new PointF(142, 282));
+            g.DrawString("9", new Font("Arial", 12), Brushes.Black, new PointF(0, 140));
+            pb_roi.Image = roi_lingkaran;
+            */
+
             pb_roi.Image = roi_area;
 
             bmp_roi = new Bitmap(right - left + 1, bottom - top + 1);
@@ -386,6 +441,8 @@ namespace FormProcessing
                 yb = 0;
             }
             pb_roi_img.Image = bmp_roi;
+            Directory.SetCurrentDirectory("C:\\Users\\bro\\source\\repos\\EyeKidneyStoneTest\\Data\\IrisROI");
+            pb_roi_img.Image.Save(openFileDialog1.SafeFileName);
         }
 
         private void btn_rasio_Click(object sender, EventArgs e)
@@ -394,6 +451,7 @@ namespace FormProcessing
             Bitmap bmp_roi_gray = new Bitmap(bmp_roi);
             int black = 0, white = 255;
             double black_count = 0, white_count = 0;
+
             double count = 0; int lain = 0;
 
             int new_xr = 0;
@@ -404,7 +462,7 @@ namespace FormProcessing
                     Color w = bmp_roi.GetPixel(x, y);
                     double xr = Math.Sqrt((Math.Pow(w.R - white, 2)) + (Math.Pow(w.G - white, 2)) + (Math.Pow(w.B - white, 2)));
 
-                    if (xr < 350)
+                    if (xr < 200)
                     {
                         new_xr = 255;
                         white_count++;
@@ -416,11 +474,11 @@ namespace FormProcessing
                     }
                     count++;
                     Color new_w = Color.FromArgb(new_xr, new_xr, new_xr);
-                    //bmp_roi_extract.SetPixel(x, y, new_w);
+                    
                     bmp_roi_extract.SetPixel(x, y, new_w);
                 }
             }
-            //bmp_roi = bmp_roi_extract;
+       
             pb_extract.Image = bmp_roi_extract;
             txt_bw.Text = "Jumlah hitam = " + Convert.ToInt16(black_count) +
                 "\nJumlah putih = " + Convert.ToInt16(white_count) +
@@ -433,6 +491,18 @@ namespace FormProcessing
             txt_ratio_bw.Text = "Ratio hitam = " + Math.Round(r_black, 3) +
                "\nRatio putih = " + Math.Round(r_white, 3);
 
+            WriteData record = new WriteData();
+
+            record.no = 1;
+            record.namaFoto = openFileDialog1.SafeFileName;
+            record.rasioHitam = r_black;
+            record.rasioPutih = r_white;
+            record.sumPixelHitam = Convert.ToInt16(black_count);
+            record.sumPixelPutih = Convert.ToInt16(white_count);
+            record.hasilAhli = "Tinggi";
+
+            records.Add(record);
+
 
         }
 
@@ -444,8 +514,12 @@ namespace FormProcessing
                 tx_hasil.Text = "HASIL: Abnormal";
             else
                 tx_hasil.Text = "HASIL: Normal";
+
+            using (var writer = new StreamWriter("C:\\Users\\bro\\source\\repos\\EyeKidneyStoneTest\\Data\\irisData.csv"))
+            using (var csv = new CsvWriter(writer))
+            {
+                csv.WriteRecords(records);
+            }
         }
-
-
     }
 }
